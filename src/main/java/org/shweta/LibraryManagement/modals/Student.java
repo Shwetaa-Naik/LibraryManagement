@@ -26,10 +26,10 @@ public class Student {
 
     private String Address;
 
-    @Column(length = 15, unique = true,nullable = true)
+    @Column(length = 15, unique = true,nullable = false)
     private String phoneNumber;
 
-    @Column(length = 30,unique = true,nullable = false)
+    @Column(length = 30,unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -43,4 +43,7 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private List<Book> books;
+
+    @OneToMany(mappedBy = "student")
+    private List<Transaction> transactions;
 }

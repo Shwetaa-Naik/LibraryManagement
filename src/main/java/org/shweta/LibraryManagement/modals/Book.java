@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.shweta.LibraryManagement.enums.BookType;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +26,9 @@ public class Book {
 
     @Column(length = 30,unique = true,nullable = false)
     private String email;
+
+    String bookNumber;
+    String bookCost;
 
     @Enumerated(EnumType.ORDINAL)
     private BookType type;
@@ -44,6 +48,9 @@ public class Book {
     @JoinColumn
     @JsonIgnoreProperties("books")
     private Student student;
+
+    @OneToMany(mappedBy = "book")
+    private List<Transaction> txns;
 
 
 }
