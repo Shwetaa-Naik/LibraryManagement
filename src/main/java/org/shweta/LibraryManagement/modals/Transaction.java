@@ -32,7 +32,7 @@ public class Transaction {
     //adv amount taken by user
     private int paidAmount;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private TransactionType status;
 
     @CreationTimestamp

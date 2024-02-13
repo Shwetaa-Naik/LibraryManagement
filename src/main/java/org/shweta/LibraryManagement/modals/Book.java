@@ -24,11 +24,9 @@ public class Book {
     @Column(length=30)
     private String bookTitle;
 
-    @Column(length = 30,unique = true,nullable = false)
-    private String email;
+    private String bookNumber;
 
-    String bookNumber;
-    String bookCost;
+    private String bookCost;
 
     @Enumerated(EnumType.ORDINAL)
     private BookType type;
