@@ -39,7 +39,7 @@ public class Book {
 
     @ManyToOne
     @JoinColumn
-   @JsonIgnoreProperties("books")
+    @JsonIgnoreProperties("books")
     private Author author;
 
     @ManyToOne

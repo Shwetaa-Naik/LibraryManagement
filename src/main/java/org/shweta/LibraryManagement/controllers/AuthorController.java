@@ -7,9 +7,5 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/author")
 public class AuthorController {
 
-   /* @PostMapping("/create")
-    public Author addAuthor(@ResponseBody Author author){
 
-       return new Author();
-    }*/
 }
