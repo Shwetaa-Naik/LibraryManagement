@@ -24,7 +24,7 @@ public class Student {
     @Column(length=20)
     private String studentName;
 
-    private String Address;
+    private String address;
 
     @Column(length = 15, unique = true,nullable = false)
     private String phoneNumber;

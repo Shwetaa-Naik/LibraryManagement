@@ -1,6 +1,7 @@
 package org.shweta.LibraryManagement.modals;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,6 +35,7 @@ public class Author {
     private Date updatedOn;
 
     @OneToMany(mappedBy = "author")
+    //@JsonIgnore
     private List<Book> books;
 
 }

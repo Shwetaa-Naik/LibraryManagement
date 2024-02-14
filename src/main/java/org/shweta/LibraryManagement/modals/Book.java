@@ -28,7 +28,7 @@ public class Book {
 
     private String bookCost;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private BookType type;
 
     @CreationTimestamp
@@ -39,7 +39,7 @@ public class Book {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnoreProperties("books")
+   // @JsonIgnoreProperties("books")
     private Author author;
 
     @ManyToOne
