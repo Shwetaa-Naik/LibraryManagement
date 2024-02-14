@@ -48,18 +48,18 @@ public class BookService {
             case EQUALS:
                 switch (filterType){
                     case BOOK_NO:
-                            List<Book> bookListByNumber=bookRepository.findByBookNo(value);
+                            List<Book> bookListByNumber=bookRepository.findByBookNumber(value);
                             return bookListByNumber;
                     case COST:
-                        List<Book> bookListByCost=bookRepository.findByCost(value);
+                        List<Book> bookListByCost=bookRepository.findByBookCost(value);
                         return bookListByCost;
                     case BOOKTYPE:
-                        List<Book> bookListByType=bookRepository.findByBookType(BookType.valueOf(value));
+                        List<Book> bookListByType=bookRepository.findByType(BookType.valueOf(value));
                         return bookListByType;
                     case AUTHOR_NAME:
-                        List<Book> bookListByAuthorName=bookRepository.findByAuthorName(value);
+                        List<Book> bookListByAuthorName=bookRepository.findByAuthor_AuthorName(value);
                         return bookListByAuthorName;
-                    default://throw exception
+                    //default://throw exception
                 }
             case IN:
                 switch (filterType){
@@ -67,7 +67,7 @@ public class BookService {
                     case COST:
                     case BOOKTYPE:
                     case AUTHOR_NAME:
-                    default://throw exception
+                   // default://throw exception
 
                 }
             case LESS_THAN:
@@ -76,7 +76,7 @@ public class BookService {
                     case COST:
                     case BOOKTYPE:
                     case AUTHOR_NAME:
-                    default://throw exception
+                    //default://throw exception
                 }
             case GREATER_THAN:
                 switch (filterType){
@@ -84,7 +84,7 @@ public class BookService {
                     case COST:
                     case BOOKTYPE:
                     case AUTHOR_NAME:
-                    default://throw exception
+                   // default://throw exception
                 }
             case LESS_THAN_EQUALS:
                 switch (filterType){
@@ -92,7 +92,7 @@ public class BookService {
                     case COST:
                     case BOOKTYPE:
                     case AUTHOR_NAME:
-                    default://throw exception
+                   // default://throw exception
                 }
             default:return new ArrayList<>();
 
