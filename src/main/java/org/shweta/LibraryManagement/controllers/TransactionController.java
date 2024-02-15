@@ -1,6 +1,7 @@
 package org.shweta.LibraryManagement.controllers;
 
 import org.shweta.LibraryManagement.dtoRequests.TransactionRequest;
+import org.shweta.LibraryManagement.dtoRequests.TransactionReturnRequest;
 import org.shweta.LibraryManagement.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,5 +25,10 @@ public class TransactionController {
     public String createTransaction(@RequestBody TransactionRequest transactionRequest){
 
         return transactionService.createTxn(transactionRequest);
+    }
+
+    @PostMapping("/return")
+    public String returnBook(@RequestBody TransactionReturnRequest transactionReturnRequest){
+        return transactionService.returnBook(transactionReturnRequest);
     }
 }

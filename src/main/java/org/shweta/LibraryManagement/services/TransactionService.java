@@ -2,6 +2,7 @@ package org.shweta.LibraryManagement.services;
 
 import jakarta.transaction.Transactional;
 import org.shweta.LibraryManagement.dtoRequests.TransactionRequest;
+import org.shweta.LibraryManagement.dtoRequests.TransactionReturnRequest;
 import org.shweta.LibraryManagement.enums.FilterType;
 import org.shweta.LibraryManagement.enums.OperatorType;
 import org.shweta.LibraryManagement.enums.StudentFilterType;
@@ -79,5 +80,17 @@ public class TransactionService {
             bookService.updateStudentId(studentId,bookId);
 
        return savedTransaction.getTxnNumber();
+    }
+
+    public String returnBook(TransactionReturnRequest transactionReturnRequest) {
+        //1.check if student is registered with library i.e. if present in db or not
+        /*2.check if the book is present in library i.e. if present entry in db or not and
+        *if present if its status is ISSUED*/
+        //3.check if same student has took that same book which he wants to return
+        //4.if yes then calculate the number of days book with student and accordingly calculate fine
+        //5.then mark the book avaiable i.e. studentid=null
+        //update the same transaction status AVAILABLE
+
+        return "Shweta";
     }
 }
