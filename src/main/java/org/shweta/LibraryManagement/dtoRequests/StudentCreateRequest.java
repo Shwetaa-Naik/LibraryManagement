@@ -16,6 +16,7 @@ import org.shweta.LibraryManagement.modals.Student;
 @AllArgsConstructor
 public class StudentCreateRequest {
 
+
     private String studentName;
 
     private String address;

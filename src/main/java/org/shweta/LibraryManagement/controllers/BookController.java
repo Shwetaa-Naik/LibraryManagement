@@ -1,5 +1,6 @@
 package org.shweta.LibraryManagement.controllers;
 
+import jakarta.validation.Valid;
 import org.shweta.LibraryManagement.dtoRequests.BookCreateRequest;
 import org.shweta.LibraryManagement.enums.FilterType;
 import org.shweta.LibraryManagement.enums.OperatorType;
@@ -23,7 +24,7 @@ public class BookController {
 
 
     @PostMapping("/create")
-    public Book addBook(@RequestBody BookCreateRequest bookCreateRequest){
+    public Book addBook(@RequestBody @Valid BookCreateRequest bookCreateRequest){
         //validations can be
 
         return bookService.addBook(bookCreateRequest);

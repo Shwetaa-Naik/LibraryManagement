@@ -31,16 +31,14 @@ public class TransactionService {
     BookService bookService;
 
     @Transactional(rollbackOn = TransactionException.class)
-    public String createTxn(TransactionRequest transactionRequest)  {
+    public String createTxn(TransactionRequest transactionRequest) throws TransactionException {
         //1.check if student is present or not
        List<Student>studentInDB = studentService.getStudents(StudentFilterType.CONTACT_NUMBER, OperatorType.EQUALS,transactionRequest.getStudentPhoneNumber());
         //2.if student is not present in db then throw an exception
         if(studentInDB ==null || studentInDB.isEmpty()){
-            try {
+
                 throw new TransactionException("Student is not registred with us and hence book wont provided");
-            } catch (TransactionException e) {
-                throw new RuntimeException(e);
-            }
+
         }
 
         Student student=studentInDB.get(0);
@@ -48,20 +46,14 @@ public class TransactionService {
       List<Book> bookInDB= bookService.getBooks(FilterType.BOOK_NO,OperatorType.EQUALS,transactionRequest.getBookNumber());
         //4.if book is not in DB then throw exception
         if(bookInDB == null || bookInDB.isEmpty()){
-            try {
                 throw new TransactionException("Selected book is not in Library");
-            } catch (TransactionException e) {
-                throw new RuntimeException(e);
-            }
+
         }
         //5.if the book is in DB but currently unavailable then throw exception
         Book book=bookInDB.get(0);
         if(book.getStudent() != null){
-            try {
-                throw new TransactionException("Selected book is currently unavailable");
-            } catch (TransactionException e) {
-                throw new RuntimeException(e);
-            }
+            throw new TransactionException("Selected book is currently unavailable");
+
         }
 
         String txnId=UUID.randomUUID().toString();
@@ -84,7 +76,7 @@ public class TransactionService {
        return savedTransaction.getTxnNumber();
     }
 
-    public String returnBook(TransactionReturnRequest transactionReturnRequest) {
+    public String returnBook(TransactionReturnRequest transactionReturnRequest) throws TransactionException {
 
 
         //update the same transaction status AVAILABLE
@@ -94,11 +86,8 @@ public class TransactionService {
         List<Student> studentList=studentService.getStudents(StudentFilterType.CONTACT_NUMBER,OperatorType.EQUALS,phone);
         Student studentInDB=studentList.get(0);
         if(studentInDB ==null){
-            try {
                 throw new TransactionException("Student is not found");
-            } catch (TransactionException e) {
-                throw new RuntimeException(e);
-            }
+
         }
 
         /*2.check if the book is present in library i.e. if present entry in db or not and
@@ -106,11 +95,8 @@ public class TransactionService {
         List<Book> bookList=bookService.getBooks(FilterType.BOOK_NO,OperatorType.EQUALS,transactionReturnRequest.getBookNumber());
         Book bookInDB=bookList.get(0);
         if(bookInDB ==null || bookInDB.getStudent()==null){
-            try {
                 throw new TransactionException("Book is either not found or may be not issued to student, Hence you cant return");
-            } catch (TransactionException e) {
-                throw new RuntimeException(e);
-            }
+
         }
 
         //3.check if same student has took that same book which he wants to return
@@ -121,11 +107,8 @@ public class TransactionService {
             //using which we can get the transaction object and can fetch the details
                 Transaction txn=transactionRepository.findByTxnNumber(transactionReturnRequest.getTxnNumber());
                 if(txn == null){
-                    try {
                         throw new TransactionException("No transaction has been found");
-                    } catch (TransactionException e) {
-                        throw new RuntimeException(e);
-                    }
+
                 }
             int amount=calculateAmount(txn);
             //5.then mark the book available i.e. studentid=null
@@ -138,11 +121,8 @@ public class TransactionService {
            // transactionRepository.saveUpdateTransaction(transactionReturnRequest.getTxnNumber(),amount,TransactionType.RETURNED);
         }
         else {
-            try {
                 throw new TransactionException("This book is not belongs to this Student");
-            } catch (TransactionException e) {
-                throw new RuntimeException(e);
-            }
+
         }
 
 
