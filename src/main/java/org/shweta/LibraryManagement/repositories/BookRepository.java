@@ -21,4 +21,6 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     @Modifying
     @Query(value = "UPDATE Book b SET b.student.id = :studentId WHERE b.id = :bookId")
     void saveUpdate(int studentId, int bookId);
+
+
 }

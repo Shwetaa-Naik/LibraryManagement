@@ -101,6 +101,9 @@ public class BookService {
 
     }
 
+    public void saveUpdate(Book book){
+        bookRepository.save(book);
+    }
     public void updateStudentId(int studentId, int bookId) {
         bookRepository.saveUpdate(studentId,bookId);
     }

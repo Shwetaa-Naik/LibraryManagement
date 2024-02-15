@@ -15,8 +15,10 @@ import org.shweta.LibraryManagement.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TransactionService {
@@ -83,14 +85,91 @@ public class TransactionService {
     }
 
     public String returnBook(TransactionReturnRequest transactionReturnRequest) {
-        //1.check if student is registered with library i.e. if present in db or not
-        /*2.check if the book is present in library i.e. if present entry in db or not and
-        *if present if its status is ISSUED*/
-        //3.check if same student has took that same book which he wants to return
-        //4.if yes then calculate the number of days book with student and accordingly calculate fine
-        //5.then mark the book avaiable i.e. studentid=null
+
+
         //update the same transaction status AVAILABLE
 
+        //1.check if student is registered with library i.e. if present in db or not
+        String phone=transactionReturnRequest.getStudentPhoneNumber();
+        List<Student> studentList=studentService.getStudents(StudentFilterType.CONTACT_NUMBER,OperatorType.EQUALS,phone);
+        Student studentInDB=studentList.get(0);
+        if(studentInDB ==null){
+            try {
+                throw new TransactionException("Student is not found");
+            } catch (TransactionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        /*2.check if the book is present in library i.e. if present entry in db or not and
+         *if present its status is ISSUED or not*/
+        List<Book> bookList=bookService.getBooks(FilterType.BOOK_NO,OperatorType.EQUALS,transactionReturnRequest.getBookNumber());
+        Book bookInDB=bookList.get(0);
+        if(bookInDB ==null || bookInDB.getStudent()==null){
+            try {
+                throw new TransactionException("Book is either not found or may be not issued to student, Hence you cant return");
+            } catch (TransactionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        //3.check if same student has took that same book which he wants to return
+        if(studentInDB.equals(bookInDB.getStudent())){
+            //4.if yes then calculate the number of days book with student and accordingly calculate fine
+            //for calculating the amount you need to have book creation time and this can be get from
+            //transaction table(object) we have transaction number
+            //using which we can get the transaction object and can fetch the details
+                Transaction txn=transactionRepository.findByTxnNumber(transactionReturnRequest.getTxnNumber());
+                if(txn == null){
+                    try {
+                        throw new TransactionException("No transaction has been found");
+                    } catch (TransactionException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            int amount=calculateAmount(txn);
+            //5.then mark the book available i.e. studentid=null
+            bookInDB.setStudent(null);
+            bookService.saveUpdate(bookInDB);
+            //6.update the same transaction status AVAILABLE
+            txn.setStatus(TransactionType.RETURNED);
+            txn.setPaidAmount(amount);
+            transactionRepository.save(txn);
+           // transactionRepository.saveUpdateTransaction(transactionReturnRequest.getTxnNumber(),amount,TransactionType.RETURNED);
+        }
+        else {
+            try {
+                throw new TransactionException("This book is not belongs to this Student");
+            } catch (TransactionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
         return "Shweta";
+    }
+
+    private int calculateAmount(Transaction txn) {
+        int settlementAmount;
+        //1.get transaction creation time
+        Long creationTime=txn.getCreatedOn().getTime();
+        Long todaysTime=System.currentTimeMillis();
+
+        Long differenceMiliseconds=todaysTime-creationTime;
+                                    //16-1=15
+        Long days= TimeUnit.MILLISECONDS.toDays(differenceMiliseconds);
+
+        int numberOfDays=days.intValue();
+
+        if(numberOfDays >=14){
+            int fine=numberOfDays-14;
+            //15-14=1
+            settlementAmount=fine*5;
+            txn.setPaidAmount(settlementAmount);
+        }
+        else {
+            settlementAmount= txn.getPaidAmount();
+        }
+        return settlementAmount;
     }
 }
