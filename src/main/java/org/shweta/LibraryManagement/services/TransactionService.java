@@ -1,5 +1,6 @@
 package org.shweta.LibraryManagement.services;
 
+import jakarta.transaction.Transactional;
 import org.shweta.LibraryManagement.dtoRequests.TransactionRequest;
 import org.shweta.LibraryManagement.enums.FilterType;
 import org.shweta.LibraryManagement.enums.OperatorType;
@@ -26,6 +27,7 @@ public class TransactionService {
     @Autowired
     BookService bookService;
 
+    @Transactional(rollbackOn = TransactionException.class)
     public String createTxn(TransactionRequest transactionRequest)  {
         //1.check if student is present or not
        List<Student>studentInDB = studentService.getStudents(StudentFilterType.CONTACT_NUMBER, OperatorType.EQUALS,transactionRequest.getStudentPhoneNumber());
@@ -51,7 +53,7 @@ public class TransactionService {
         }
         //5.if the book is in DB but currently unavailable then throw exception
         Book book=bookInDB.get(0);
-        if(book.getStudent() == null){
+        if(book.getStudent() != null){
             try {
                 throw new TransactionException("Selected book is currently unavailable");
             } catch (TransactionException e) {
@@ -64,12 +66,18 @@ public class TransactionService {
         Transaction txn = Transaction.builder().
                 student(student).
                 book(book).
+                paidAmount(transactionRequest.getMoney()).
                 txnNumber(txnId).
                 status(TransactionType.ISSUED).
                 build();
 
         //7. save the data in transaction table
         Transaction savedTransaction=transactionRepository.save(txn);
+        //8.change the status of book
+        int studentId=student.getId();
+        int bookId=book.getId();
+            bookService.updateStudentId(studentId,bookId);
+
        return savedTransaction.getTxnNumber();
     }
 }

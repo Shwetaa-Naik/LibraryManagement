@@ -100,4 +100,8 @@ public class BookService {
 
 
     }
+
+    public void updateStudentId(int studentId, int bookId) {
+        bookRepository.saveUpdate(studentId,bookId);
+    }
 }
