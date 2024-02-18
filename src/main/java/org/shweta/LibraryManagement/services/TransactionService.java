@@ -129,7 +129,8 @@ public class TransactionService {
         return "Shweta";
     }
 
-    private int calculateAmount(Transaction txn) {
+    /*private int calculateAmount(Transaction txn) {*/
+    public int calculateAmount(Transaction txn) {
         int settlementAmount;
         //1.get transaction creation time
         Long creationTime=txn.getCreatedOn().getTime();
