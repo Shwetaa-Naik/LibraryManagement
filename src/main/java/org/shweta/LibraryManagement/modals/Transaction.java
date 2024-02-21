@@ -1,11 +1,13 @@
 package org.shweta.LibraryManagement.modals;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.shweta.LibraryManagement.enums.TransactionType;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -14,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Transaction {
+public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
@@ -23,10 +25,12 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnore
     private Student student;
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnore
     private Book book;
 
     //adv amount taken by user

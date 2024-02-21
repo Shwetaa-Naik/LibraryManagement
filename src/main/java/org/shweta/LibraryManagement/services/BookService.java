@@ -8,6 +8,7 @@ import org.shweta.LibraryManagement.modals.Author;
 import org.shweta.LibraryManagement.modals.Book;
 import org.shweta.LibraryManagement.repositories.AuthorRepository;
 import org.shweta.LibraryManagement.repositories.BookRepository;
+import org.shweta.LibraryManagement.repositories.RedisDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ public class BookService {
     private AuthorRepository authorRepository;
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private RedisDataRepository redisDataRepository;
 
     public Book addBook(BookCreateRequest bookCreateRequest) {
         //extract author email from bookCreateRequest
@@ -35,9 +38,9 @@ public class BookService {
 
         Book bookObj=bookCreateRequest.toBook();
         bookObj.setAuthor(authorInDB);
-        return bookRepository.save(bookObj);
-
-
+        Book book1 = bookRepository.save(bookObj);
+        redisDataRepository.setBookToRedis(book1);
+        return book1;
     }
 
     public List<Book> getBooks(FilterType filterType, OperatorType operator, String value) {
@@ -49,7 +52,18 @@ public class BookService {
                 switch (filterType){
                     case BOOK_NO:
                             List<Book> bookListByNumber=bookRepository.findByBookNumber(value);
-                            return bookListByNumber;
+                            List<Book> bookFromRedis=redisDataRepository.getBookFromRedisByBookNumber(value);
+                                if(!bookFromRedis.isEmpty()){
+                                    return bookFromRedis;
+                                }
+                                else{
+                                    if(!bookListByNumber.isEmpty()){
+                                        redisDataRepository.setBookToRedisByBookNumber(bookListByNumber.get(0));
+                                        return bookListByNumber;
+                                    }
+                                }
+
+                        //return bookListByNumber;
                     case COST:
                         List<Book> bookListByCost=bookRepository.findByBookCost(value);
                         return bookListByCost;
