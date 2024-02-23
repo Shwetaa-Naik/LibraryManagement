@@ -72,7 +72,7 @@ public class Student implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return phoneNumber;
     }
 
     @Override

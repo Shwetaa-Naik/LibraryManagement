@@ -18,21 +18,21 @@ import org.shweta.LibraryManagement.modals.Book;
 @AllArgsConstructor
 public class BookCreateRequest {
 
-    @NotBlank(message = "Author Name cant be blank")
+
     private String authorName;
 
-    @NotBlank(message = "")
+
     private String authorEmail;
 
-    @NotBlank(message = "")
     private String bookTitle;
 
-    @Positive(message = "")
+    @NotBlank(message = "Shouldnt be blank")
     private String bookNumber;
-    @Positive(message = "")
+
+    @NotBlank(message = "Please provde cost")
     private String bookCost;
 
-    @NotBlank(message = "")
+
     private BookType bookType;
 
     public Author toAuthor() {

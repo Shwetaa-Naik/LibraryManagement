@@ -51,7 +51,14 @@ public class StudentService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-       return studentRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
+
+        if(!studentRepository.findByStudentPhoneNumber(phoneNumber).isEmpty()){
+            List<Student> students= studentRepository.findByStudentPhoneNumber(phoneNumber);
+            return students.get(0);
+
+        }
+
+        return null;
     }
 }

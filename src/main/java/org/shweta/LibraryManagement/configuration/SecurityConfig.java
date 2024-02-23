@@ -42,6 +42,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(authorise ->authorise
                 .requestMatchers("/transaction/create/**").hasAnyAuthority(studentAuthority,adminAuthority)
+                .requestMatchers("/transaction/return/**").hasAnyAuthority(adminAuthority)
                 .anyRequest().permitAll()
 
         ).formLogin(withDefaults()).httpBasic(withDefaults()).csrf(csrf->csrf.disable());
