@@ -52,7 +52,7 @@ public class BookService {
                 switch (filterType){
                     case BOOK_NO:
                             List<Book> bookListByNumber=bookRepository.findByBookNumber(value);
-                            List<Book> bookFromRedis=redisDataRepository.getBookFromRedisByBookNumber(value);
+                            /*List<Book> bookFromRedis=redisDataRepository.getBookFromRedisByBookNumber(value);
                                 if(!bookFromRedis.isEmpty()){
                                     return bookFromRedis;
                                 }
@@ -61,9 +61,9 @@ public class BookService {
                                         redisDataRepository.setBookToRedisByBookNumber(bookListByNumber.get(0));
                                         return bookListByNumber;
                                     }
-                                }
+                                }*/
 
-                        //return bookListByNumber;
+                        return bookListByNumber;
                     case COST:
                         List<Book> bookListByCost=bookRepository.findByBookCost(value);
                         return bookListByCost;

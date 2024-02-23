@@ -27,14 +27,19 @@ public class StudentCreateRequest {
 
     private StudentType status;
 
+    private String password;
+
+    private String authority;
 
     public Student toStudent() {
        return Student.builder().
                studentName(this.studentName).
-                address(this.address).
+               address(this.address).
                phoneNumber(this.phoneNumber).
                email(this.email).
+               password(this.password).
+               authority(this.authority).
                status(StudentType.ACTIVE).
-                build();
+               build();
     }
 }

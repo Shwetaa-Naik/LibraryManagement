@@ -1,6 +1,7 @@
 package org.shweta.LibraryManagement.modals;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,12 +26,14 @@ public class Transaction implements Serializable {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+   // @JsonIgnore
+    @JsonIgnoreProperties("transactions")
     private Student student;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+    //@JsonIgnore
+    @JsonIgnoreProperties("txns")
     private Book book;
 
     //adv amount taken by user

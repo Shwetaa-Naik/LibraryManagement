@@ -15,4 +15,6 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     @Query(value = "select s from Student s where phoneNumber =:phoneNumber")
     List<Student> findByStudentPhoneNumber(String phoneNumber);
 
+    Student findByEmail(String email);
+
 }

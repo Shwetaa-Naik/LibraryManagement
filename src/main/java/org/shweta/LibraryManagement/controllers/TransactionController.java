@@ -4,8 +4,12 @@ import jakarta.validation.Valid;
 import org.shweta.LibraryManagement.dtoRequests.TransactionRequest;
 import org.shweta.LibraryManagement.dtoRequests.TransactionReturnRequest;
 import org.shweta.LibraryManagement.exceptions.TransactionException;
+import org.shweta.LibraryManagement.modals.Student;
 import org.shweta.LibraryManagement.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +30,9 @@ public class TransactionController {
     @PostMapping("/create")
     public String createTransaction(@RequestBody @Valid TransactionRequest transactionRequest) throws TransactionException {
 
-        return transactionService.createTxn(transactionRequest);
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Student student=(Student) authentication.getPrincipal();
+        return transactionService.createTxn(transactionRequest,student);
     }
 
     @PostMapping("/return")

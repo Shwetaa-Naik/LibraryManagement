@@ -11,8 +11,8 @@ import lombok.*;
 @Builder
 public class TransactionRequest {
 
-@NotBlank(message = "should provide student contact number")
-    private String studentPhoneNumber;
+   /* @NotBlank(message = "should provide student contact number")
+    private String studentPhoneNumber;*/
 
     private String bookNumber;
 

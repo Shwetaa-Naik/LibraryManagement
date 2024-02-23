@@ -31,9 +31,9 @@ public class TransactionService {
     BookService bookService;
 
     @Transactional(rollbackOn = TransactionException.class)
-    public String createTxn(TransactionRequest transactionRequest) throws TransactionException {
+    public String createTxn(TransactionRequest transactionRequest,Student student1) throws TransactionException {
         //1.check if student is present or not
-       List<Student>studentInDB = studentService.getStudents(StudentFilterType.CONTACT_NUMBER, OperatorType.EQUALS,transactionRequest.getStudentPhoneNumber());
+       List<Student>studentInDB = studentService.getStudents(StudentFilterType.CONTACT_NUMBER, OperatorType.EQUALS,student1.getPhoneNumber());
         //2.if student is not present in db then throw an exception
         if(studentInDB ==null || studentInDB.isEmpty()){
 
